@@ -1,6 +1,7 @@
 <?php namespace Potsky\LaravelLocalizationHelpers\Factory;
 
 use Config;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\CS\Console\Application;
