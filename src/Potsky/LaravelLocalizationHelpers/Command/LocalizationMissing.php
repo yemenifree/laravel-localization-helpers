@@ -256,7 +256,14 @@ class LocalizationMissing extends LocalizationAbstract
                 if ($family === Localization::JSON_HEADER) {
                     $lang_file = new LangFileJson($dir_lang, $lang);
                 } else {
-                    $lang_file = new LangFileGenuine($dir_lang, $lang, $family);
+                    if(Config::get( Localization::PREFIX_LARAVEL_CONFIG . 'support_modules', false ) && strpos( $family , '::' ) !== false)
+                    {
+                        list($moduleName,$filename) =  explode('::',$family);
+                        $dir_lang = \Module::find($moduleName)->getExtraPath(Config::get( 'modules.paths.generator.lang.path'));
+                        $lang_file = new LangFileGenuine($dir_lang, $lang, $filename);
+                    }else{
+                        $lang_file = new LangFileGenuine($dir_lang, $lang, $family);
+                    }
 
                     if (in_array($family, $this->ignore_lang_files) || in_array($lang_file->getShortFilePath(), $this->ignore_lang_files)) {
                         if ($this->option('verbose')) {
