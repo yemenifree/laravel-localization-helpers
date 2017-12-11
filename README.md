@@ -38,17 +38,42 @@ LLH is a set of artisan commands to manage translations in your Laravel project.
 | 5.2.x    | 5.2.x    | 2.3.x
 | 5.3.x    | 5.3.x    | 2.4.x
 | 5.4.x    | 5.4.x    | 2.5.x
+| 5.5.x    | 5.5.x    | 2.6.x
 
 - Add the following line in the `require-dev` array of the `composer.json` file and replace the version if needed according to your Laravel version:
     ```php
-    "potsky/laravel-localization-helpers" : "2.5.*"
+    "potsky/laravel-localization-helpers" : "2.6.*"
     ```
 
 - Update your installation : `composer update`
-- For Laravel, add the following line in the `providers` array of the `config/app.php` configuration file :
+
+- For Laravel, add the following lines in the `AppServiceProvider` array of the `config/app.php` configuration file :
     ```php
     Potsky\LaravelLocalizationHelpers\LaravelLocalizationHelpersServiceProvider::class,
     ```
+
+	On Laravel 5.5, if you don't use the package in production, disable auto-loading and register it only on `local` or `dev`: 
+
+	- Add the following lines in the `register` method of the `AppServiceProvider` :
+		```php
+		public function register()
+		{
+			if ($this->app->environment() === 'dev') { // or local or whatever
+				$this->app->register(\Potsky\LaravelLocalizationHelpers\LaravelLocalizationHelpersServiceProvider::class);
+			}
+		}
+		```
+
+    - Disable to auto-register provider by adding these lines in the `composer.json` file:
+		```php
+		"extra" : {
+			"laravel" : {
+				"dont-discover" : [
+					"potsky/laravel-localization-helpers"
+				]
+			}
+		}
+		```
 
 - For Lumen, add the following lines in the `bootstrap/app.php` file :
 	```php
@@ -290,6 +315,10 @@ Use the [github issue tool](https://github.com/potsky/laravel-localization-helpe
 
 ## 5. Upgrade notices
 
+### From `v2.x.5` to `v2.x.6`
+
+- PHPCSFixer has changed. Previous fixers are not supported anymore. Take a look at the [configuration file](https://github.com/potsky/laravel-localization-helpers/tree/master/src/config) in the package to check new rules.
+
 ### From `v2.x.4` to `v2.x.5`
 
 - Parameter `dot_notation_split_regex` has been added in the [configuration file](https://github.com/potsky/laravel-localization-helpers/tree/master/src/config). Add it in your configuration file.
@@ -304,6 +333,12 @@ Use the [github issue tool](https://github.com/potsky/laravel-localization-helpe
 - Take a look at the [configuration file](https://github.com/potsky/laravel-localization-helpers/tree/master/src/config) in the package to add new parameters you don't have in your current package configuration file.
 
 ## 6. Change Log
+
+### v2.x.6
+
+- change: support Laravel 5.5
+- change: update PHPCSFixer, rules have changed!
+- change: translation package has been updated
 
 ### v2.x.5
 
