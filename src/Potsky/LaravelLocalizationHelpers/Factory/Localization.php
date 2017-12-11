@@ -6,6 +6,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use RegexIterator;
+use Illuminate\Support\Str;
 
 class Localization
 {
@@ -589,7 +590,7 @@ class Localization
         }
         // @codeCoverageIgnoreEnd
     }
-    
+
     /**
      * Extract module name from perfix name exmp. module::user.hello
      *
