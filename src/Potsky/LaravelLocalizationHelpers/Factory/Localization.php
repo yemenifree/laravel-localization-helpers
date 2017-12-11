@@ -186,6 +186,16 @@ class Localization
                     unset($matches[1][$k]);
                 }
                 if (strpos($v, '::') !== false) {
+                    if(config( Localization::PREFIX_LARAVEL_CONFIG . 'support_modules' , false))
+                    {
+                        $module_name = $this->extractModuleName($v);
+                        if(\Module::has($module_name)) // if module exsit skip remove translation
+                        {
+                            $module = \Module::find($module_name); // get module info
+                            if(is_null($module->auto_localization) || $module->auto_localization === true)
+                                continue;
+                        }
+                    }
                     unset($matches[1][$k]);
                 }
             }
@@ -578,6 +588,19 @@ class Localization
             return null;
         }
         // @codeCoverageIgnoreEnd
+    }
+    
+    /**
+     * Extract module name from perfix name exmp. module::user.hello
+     *
+     * @param string $name a name of statment
+     *
+     * @return string
+     */
+    public function extractModuleName($name)
+    {
+        list($module,$translation) = explode('::',$name);
+        return Str::studly(trim($module,"'"));
     }
 }
 
